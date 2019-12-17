@@ -31,18 +31,17 @@ class LibraryViewController: UIViewController,
     var christmasSongList : [SongList] = []
     var availableSongList : [SongList] = []
     
-     var sections = [SectionHeader]()
-     var plans:String = ""
-     var userEmail: String = ""
-     var db: Firestore!
+    var sections = [SectionHeader]()
+    var plans: [String] = []
+    var userEmail: String = ""
     
+    var db: Firestore!
     var store: Storage!
     var storeRef: StorageReference!
     
     var loadingAlert:UIAlertController?
     var loadingIndicator:UIActivityIndicatorView?
     
-    var ref: DatabaseReference!
     private var listener : ListenerRegistration!
     
     deinit {
@@ -54,7 +53,6 @@ class LibraryViewController: UIViewController,
         userEmail = KeychainWrapper.standard.string(forKey: KeychainString.userEmail) ?? ""
         //initializeFirebase()
         print("viewDidLoad")
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -115,10 +113,9 @@ class LibraryViewController: UIViewController,
                 let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
                 
                 //print("Document data: \(dataDescription)")
-                //self.plans = document.data()?["planName"] as! [String]
-                 self.plans = document.data()?["planName"] as! String
-                
-                 self.checkDownloadSongs()
+                self.plans = document.data()?["planName"] as! [String]
+                 //self.plans = document.data()?["planName"] as! String
+                self.checkDownloadSongs()
             } else {
                 print("Document does not exist")
             }
@@ -278,35 +275,32 @@ class LibraryViewController: UIViewController,
                         let releaseDate = document.get("releaseDate") as! String
                         let songType = document.get("songType") as! Int
                         
-                        print("plan_name \(plan_name)")
-                        print("plans \(self.plans)")
-                        
-                        if plan_name.contains(self.plans) {
-                            if !self.downloadedSongList.contains(where: { $0.title == title }) {
-                                if !self.instrumentalSongList.contains(where: { $0.title == title }) {
-                                    if !self.backgroundSongList.contains(where: { $0.title == title }) {
-                                        if !self.christmasSongList.contains(where: { $0.title == title }) {
-                                            self.availableSongList += [SongList(title: title, audioPath: audioPath, audioUrl:audioUrl, imagePath:imagePath, imageUrl:imageUrl,plan_name:plan_name,releaseDate:releaseDate, songType:songType, downloadedPath:"",downloadedImagePath:"")]
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        
-                        
-//                        for plan in self.plans {
-//                            if plan_name.contains(plan) {
-//                                if !self.downloadedSongList.contains(where: { $0.title == title }) {
-//                                    if !self.instrumentalSongList.contains(where: { $0.title == title }) {
-//                                        if !self.backgroundSongList.contains(where: { $0.title == title }) {
-//                                            if !self.christmasSongList.contains(where: { $0.title == title }) {
-//                                                self.availableSongList += [SongList(title: title, audioPath: audioPath, audioUrl:audioUrl, imagePath:imagePath, imageUrl:imageUrl,plan_name:plan_name,releaseDate:releaseDate, songType:songType, downloadedPath:"",downloadedImagePath:"")]
-//                                            }
+//                        if plan_name.contains(self.plans) {
+//                            if !self.downloadedSongList.contains(where: { $0.title == title }) {
+//                                if !self.instrumentalSongList.contains(where: { $0.title == title }) {
+//                                    if !self.backgroundSongList.contains(where: { $0.title == title }) {
+//                                        if !self.christmasSongList.contains(where: { $0.title == title }) {
+//                                            self.availableSongList += [SongList(title: title, audioPath: audioPath, audioUrl:audioUrl, imagePath:imagePath, imageUrl:imageUrl,plan_name:plan_name,releaseDate:releaseDate, songType:songType, downloadedPath:"",downloadedImagePath:"")]
 //                                        }
 //                                    }
 //                                }
 //                            }
 //                        }
+                        
+                        
+                        for plan in self.plans {
+                            if plan_name.contains(plan) {
+                                if !self.downloadedSongList.contains(where: { $0.title == title }) {
+                                    if !self.instrumentalSongList.contains(where: { $0.title == title }) {
+                                        if !self.backgroundSongList.contains(where: { $0.title == title }) {
+                                            if !self.christmasSongList.contains(where: { $0.title == title }) {
+                                                self.availableSongList += [SongList(title: title, audioPath: audioPath, audioUrl:audioUrl, imagePath:imagePath, imageUrl:imageUrl,plan_name:plan_name,releaseDate:releaseDate, songType:songType, downloadedPath:"",downloadedImagePath:"")]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         
                         
                         self.availableSongList  = self.availableSongList.sorted(by: { $0.title < $1.title })

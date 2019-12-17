@@ -160,22 +160,22 @@ class SettingsViewController: UIViewController {
                 
                 print("Document data: \(dataDescription)")
                 
-                var plan = document.data()?["planName"] as! String
-//                var plan:[String]
-//                plan = document.data()?["planName"] as! [String]
-//
-//                var plans = ""
-//
-//                for child in plan {
-//                    plans = "\(plans) \(child)"
-//                }
+                //var plan = document.data()?["planName"] as! String
+                var plan:[String]
+                plan = document.data()?["planName"] as! [String]
+
+                var plans = ""
+
+                for child in plan {
+                    plans = "\(plans) \(child)"
+                }
                 
                 let firstName = document.data()?["firstName"] ?? ""
                 let lastName = document.data()?["lastName"] ?? ""
                 
                 self.userName = "\(firstName) \(lastName)"
                 self.nameValue.text = self.userName
-                self.subscriptionValue.text = plan
+                self.subscriptionValue.text = plans
                 
                 self.emailValue.text = self.userEmail
             } else {
