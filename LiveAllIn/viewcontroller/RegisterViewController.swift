@@ -12,6 +12,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import JGProgressHUD
 
+
 class RegisterViewController: UIViewController {
 
     @IBOutlet weak var emailField: UITextField!
@@ -62,20 +63,51 @@ class RegisterViewController: UIViewController {
             if password.elementsEqual(confirmPassword) {
                 let docRef = db.collection(FirebaseCollection.Users)
                     .document(email)
-                
+
                 docRef.getDocument { (document, error) in
                     if let document = document, document.exists {
-                        self.hud.dismiss()
-                        self.notFoundLabel.isHidden = true
-                        self.allInSiteButton.isHidden = true
+                        //self.hud.dismiss()
+                        //self.notFoundLabel.isHidden = true
+                        //self.allInSiteButton.isHidden = true
+                        
+                        Auth.auth().createUser(withEmail: email, password: password){
+                            (user,error) in
+                            
+                            if error == nil{
+                                self.hud.dismiss()
+                                
+                                let alertController = UIAlertController(title: "Live All In", message: "Successfully Registered!", preferredStyle: .alert)
+                                
+                                let OKAction = UIAlertAction(title: "OK", style: .default) { (action:UIAlertAction!) in
+                                    self.dismiss(animated: false, completion: nil)
+                                }
+                                alertController.addAction(OKAction)
+                                self.present(alertController, animated: true, completion:nil)
+                            } else {
+                                if let errorCode = AuthErrorCode(rawValue: (error?._code)!) {
+                                    self.hud.dismiss()
+                                }
+                            }
+                        }
+                        
                     } else {
                         print("Document does not exist")
                         self.hud.dismiss()
                         self.notFoundLabel.isHidden = false
                         self.allInSiteButton.isHidden = false
+                        
+                        let alertController = UIAlertController(title: "Live All In", message: "Account Not Found!", preferredStyle: .alert)
+                        
+                        let OKAction = UIAlertAction(title: "OK", style: .default) { (action:UIAlertAction!) in
+                        }
+                        
+                        alertController.addAction(OKAction)
+                        self.present(alertController, animated: true, completion:nil)
                     }
                 }
             } else {
+                self.hud.dismiss()
+                
                 let alertController = UIAlertController(title: "Live All In", message: "Confirm password doesn't match", preferredStyle: .alert)
                 
                 let OKAction = UIAlertAction(title: "OK", style: .default) { (action:UIAlertAction!) in
