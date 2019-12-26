@@ -103,15 +103,15 @@ class SettingsViewController: UIViewController {
             KeychainWrapper.standard.removeObject(forKey: KeychainString.userEmail)
             KeychainWrapper.standard.removeObject(forKey: KeychainString.userName)
             
-            let songsIn = [nil] as [Any?]
+            //let songsIn = [nil] as [Any?]
             
-            let encoded = NSKeyedArchiver.archivedData(withRootObject: songsIn)
-            UserDefaults.standard.set(encoded, forKey: "encodedData")
+            //let encoded = NSKeyedArchiver.archivedData(withRootObject: songsIn)
+            //UserDefaults.standard.set(encoded, forKey: "encodedData")
             
-            let domain = Bundle.main.bundleIdentifier!
-            UserDefaults.standard.removePersistentDomain(forName: domain)
-            self.resetDefaults()
-            UserDefaults.standard.synchronize()
+            //let domain = Bundle.main.bundleIdentifier!
+            //UserDefaults.standard.removePersistentDomain(forName: domain)
+            //self.resetDefaults()
+            //UserDefaults.standard.synchronize()
             
             try! Auth.auth().signOut()
             

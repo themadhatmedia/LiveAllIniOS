@@ -17,8 +17,9 @@ class Song: NSObject, NSCoding {
     var downloadedPath:String
     var downloadedImagePath:String
     var songType:Int
+    var email:String
     
-    init(title: String, audioPath: String, downloadedPath:String, downloadedImagePath:String, imageUrl: String, releaseDate: String, songType: Int ) {
+    init(title: String, audioPath: String, downloadedPath:String, downloadedImagePath:String, imageUrl: String, releaseDate: String, songType: Int, email:String) {
         self.title = title
         self.audioPath = audioPath
         self.downloadedPath = downloadedPath
@@ -26,6 +27,7 @@ class Song: NSObject, NSCoding {
         self.imageUrl = imageUrl
         self.releaseDate = releaseDate
         self.songType = songType
+        self.email = email
     }
     
     required convenience init(coder aCoder: NSCoder) {
@@ -36,8 +38,10 @@ class Song: NSObject, NSCoding {
         let imageUrl = aCoder.decodeObject(forKey: "imageUrl") as! String
         let releaseDate = aCoder.decodeObject(forKey: "releaseDate") as! String
         let songType = aCoder.decodeInteger(forKey: "songType")
+        let email = aCoder.decodeObject(forKey: "email") as! String
         
-        self.init(title: title, audioPath:audioPath, downloadedPath:downloadedPath, downloadedImagePath:downloadedImagePath, imageUrl:imageUrl, releaseDate:releaseDate,songType:songType)
+        
+        self.init(title: title, audioPath:audioPath, downloadedPath:downloadedPath, downloadedImagePath:downloadedImagePath, imageUrl:imageUrl, releaseDate:releaseDate,songType:songType, email:email)
     }
     
     func encode(with acoder: NSCoder) {
@@ -48,5 +52,6 @@ class Song: NSObject, NSCoding {
         acoder.encode(imageUrl,forKey: "imageUrl")
         acoder.encode(releaseDate,forKey: "releaseDate")
         acoder.encode(songType,forKey: "songType")
+        acoder.encode(email,forKey: "email")
     }
 }

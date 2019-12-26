@@ -30,6 +30,7 @@ class LibraryViewController: UIViewController,
     var backgroundSongList : [SongList] = []
     var christmasSongList : [SongList] = []
     var availableSongList : [SongList] = []
+    var storedSongList : [SongList] = []
     
     var sections = [SectionHeader]()
     var plans: [String] = []
@@ -171,36 +172,46 @@ class LibraryViewController: UIViewController,
                 let downloadedPath = dec.downloadedPath
                 let downloadedImagePath = dec.downloadedImagePath
                 let songType = dec.songType
+                let email = dec.email
                 let audioUrl = ""
                 let imagePath = ""
                 let plan_name = [String]()
                 
-                switch(songType) {
-                case 0:
-                    if !downloadedSongList.contains(where: { $0.title == title }) {
-                        downloadedSongList += [SongList(title: title, audioPath: audioPath, audioUrl: audioUrl, imagePath: imagePath, imageUrl: imageUrl,plan_name: plan_name,releaseDate: releaseDate, songType: songType, downloadedPath:downloadedPath, downloadedImagePath:downloadedImagePath)]
+                
+                print("title: \(title)")
+                print("email: \(email)")
+                print("downloadedImagePath: \(downloadedImagePath)")
+                
+                storedSongList += [SongList(title: title, audioPath: audioPath, audioUrl: audioUrl, imagePath: imagePath, imageUrl: imageUrl,plan_name: plan_name,releaseDate: releaseDate, songType: songType, downloadedPath:downloadedPath, downloadedImagePath:downloadedImagePath, email:email)]
+                
+                if self.userEmail.elementsEqual(email) {
+                    switch(songType) {
+                    case 0:
+                        if !downloadedSongList.contains(where: { $0.title == title }) {
+                            downloadedSongList += [SongList(title: title, audioPath: audioPath, audioUrl: audioUrl, imagePath: imagePath, imageUrl: imageUrl,plan_name: plan_name,releaseDate: releaseDate, songType: songType, downloadedPath:downloadedPath, downloadedImagePath:downloadedImagePath, email:email)]
+                        }
+                        break
+                    case 1:
+                        if !instrumentalSongList.contains(where: { $0.title == title }) {
+                            instrumentalSongList += [SongList(title: title, audioPath: audioPath, audioUrl: audioUrl, imagePath: imagePath, imageUrl: imageUrl,plan_name: plan_name,releaseDate: releaseDate, songType: songType, downloadedPath:downloadedPath, downloadedImagePath:downloadedImagePath, email:email)]
+                        }
+                        break
+                    case 2:
+                        if !backgroundSongList.contains(where: { $0.title == title }) {
+                            backgroundSongList += [SongList(title: title, audioPath: audioPath, audioUrl: audioUrl, imagePath: imagePath, imageUrl: imageUrl,plan_name: plan_name,releaseDate: releaseDate, songType: songType, downloadedPath:downloadedPath,downloadedImagePath:downloadedImagePath, email:email)]
+                        }
+                        break
+                    case 3:
+                        if !christmasSongList.contains(where: { $0.title == title }) {
+                            christmasSongList += [SongList(title: title, audioPath: audioPath, audioUrl: audioUrl, imagePath: imagePath, imageUrl: imageUrl,plan_name: plan_name,releaseDate: releaseDate, songType: songType, downloadedPath:downloadedPath,downloadedImagePath:downloadedImagePath, email:email)]
+                        }
+                        break
+                    default:
+                        if !downloadedSongList.contains(where: { $0.title == title }) {
+                            downloadedSongList += [SongList(title: title, audioPath: audioPath, audioUrl: audioUrl, imagePath: imagePath, imageUrl: imageUrl,plan_name: plan_name,releaseDate: releaseDate, songType: songType, downloadedPath:downloadedPath,downloadedImagePath:downloadedImagePath, email:email)]
+                        }
+                        break
                     }
-                    break
-                case 1:
-                    if !instrumentalSongList.contains(where: { $0.title == title }) {
-                        instrumentalSongList += [SongList(title: title, audioPath: audioPath, audioUrl: audioUrl, imagePath: imagePath, imageUrl: imageUrl,plan_name: plan_name,releaseDate: releaseDate, songType: songType, downloadedPath:downloadedPath, downloadedImagePath:downloadedImagePath)]
-                    }
-                    break
-                case 2:
-                    if !backgroundSongList.contains(where: { $0.title == title }) {
-                        backgroundSongList += [SongList(title: title, audioPath: audioPath, audioUrl: audioUrl, imagePath: imagePath, imageUrl: imageUrl,plan_name: plan_name,releaseDate: releaseDate, songType: songType, downloadedPath:downloadedPath,downloadedImagePath:downloadedImagePath)]
-                    }
-                    break
-                case 3:
-                    if !christmasSongList.contains(where: { $0.title == title }) {
-                        christmasSongList += [SongList(title: title, audioPath: audioPath, audioUrl: audioUrl, imagePath: imagePath, imageUrl: imageUrl,plan_name: plan_name,releaseDate: releaseDate, songType: songType, downloadedPath:downloadedPath,downloadedImagePath:downloadedImagePath)]
-                    }
-                    break
-                default:
-                    if !downloadedSongList.contains(where: { $0.title == title }) {
-                        downloadedSongList += [SongList(title: title, audioPath: audioPath, audioUrl: audioUrl, imagePath: imagePath, imageUrl: imageUrl,plan_name: plan_name,releaseDate: releaseDate, songType: songType, downloadedPath:downloadedPath,downloadedImagePath:downloadedImagePath)]
-                    }
-                    break
                 }
             }
             getSongList()
@@ -215,7 +226,7 @@ class LibraryViewController: UIViewController,
         if downloadedSongList.count > 0 {
             for song in downloadedSongList {
                 if !actualLocalSongList.contains(where: { $0.title == song.title }) {
-                    actualLocalSongList += [SongList(title: song.title, audioPath: song.audioPath, audioUrl: song.audioUrl, imagePath: song.imagePath, imageUrl: song.imageUrl,plan_name: song.plan_name,releaseDate: song.releaseDate, songType: song.songType, downloadedPath:song.downloadedPath,downloadedImagePath:song.downloadedImagePath)]
+                    actualLocalSongList += [SongList(title: song.title, audioPath: song.audioPath, audioUrl: song.audioUrl, imagePath: song.imagePath, imageUrl: song.imageUrl,plan_name: song.plan_name,releaseDate: song.releaseDate, songType: song.songType, downloadedPath:song.downloadedPath,downloadedImagePath:song.downloadedImagePath, email:song.email)]
                 }
             }
         }
@@ -223,7 +234,7 @@ class LibraryViewController: UIViewController,
         if instrumentalSongList.count > 0 {
             for song in instrumentalSongList {
                 if !actualLocalSongList.contains(where: { $0.title == song.title }) {
-                    actualLocalSongList += [SongList(title: song.title, audioPath: song.audioPath, audioUrl: song.audioUrl, imagePath: song.imagePath, imageUrl: song.imageUrl,plan_name: song.plan_name,releaseDate: song.releaseDate, songType: song.songType, downloadedPath:song.downloadedPath,downloadedImagePath:song.downloadedImagePath)]
+                    actualLocalSongList += [SongList(title: song.title, audioPath: song.audioPath, audioUrl: song.audioUrl, imagePath: song.imagePath, imageUrl: song.imageUrl,plan_name: song.plan_name,releaseDate: song.releaseDate, songType: song.songType, downloadedPath:song.downloadedPath,downloadedImagePath:song.downloadedImagePath, email:song.email)]
                 }
             }
         }
@@ -231,7 +242,7 @@ class LibraryViewController: UIViewController,
         if backgroundSongList.count > 0 {
             for song in backgroundSongList {
                 if !actualLocalSongList.contains(where: { $0.title == song.title }) {
-                    actualLocalSongList += [SongList(title: song.title, audioPath: song.audioPath, audioUrl: song.audioUrl, imagePath: song.imagePath, imageUrl: song.imageUrl,plan_name: song.plan_name,releaseDate: song.releaseDate, songType: song.songType, downloadedPath:song.downloadedPath,downloadedImagePath:song.downloadedImagePath)]
+                    actualLocalSongList += [SongList(title: song.title, audioPath: song.audioPath, audioUrl: song.audioUrl, imagePath: song.imagePath, imageUrl: song.imageUrl,plan_name: song.plan_name,releaseDate: song.releaseDate, songType: song.songType, downloadedPath:song.downloadedPath,downloadedImagePath:song.downloadedImagePath, email:song.email)]
                 }
             }
         }
@@ -239,7 +250,7 @@ class LibraryViewController: UIViewController,
         if christmasSongList.count > 0 {
             for song in christmasSongList {
                 if !actualLocalSongList.contains(where: { $0.title == song.title }) {
-                    actualLocalSongList += [SongList(title: song.title, audioPath: song.audioPath, audioUrl: song.audioUrl, imagePath: song.imagePath, imageUrl: song.imageUrl,plan_name: song.plan_name,releaseDate: song.releaseDate, songType: song.songType, downloadedPath:song.downloadedPath,downloadedImagePath:song.downloadedImagePath)]
+                    actualLocalSongList += [SongList(title: song.title, audioPath: song.audioPath, audioUrl: song.audioUrl, imagePath: song.imagePath, imageUrl: song.imageUrl,plan_name: song.plan_name,releaseDate: song.releaseDate, songType: song.songType, downloadedPath:song.downloadedPath,downloadedImagePath:song.downloadedImagePath, email:song.email)]
                 }
             }
         }
@@ -294,7 +305,7 @@ class LibraryViewController: UIViewController,
                                     if !self.instrumentalSongList.contains(where: { $0.title == title }) {
                                         if !self.backgroundSongList.contains(where: { $0.title == title }) {
                                             if !self.christmasSongList.contains(where: { $0.title == title }) {
-                                                self.availableSongList += [SongList(title: title, audioPath: audioPath, audioUrl:audioUrl, imagePath:imagePath, imageUrl:imageUrl,plan_name:plan_name,releaseDate:releaseDate, songType:songType, downloadedPath:"",downloadedImagePath:"")]
+                                                self.availableSongList += [SongList(title: title, audioPath: audioPath, audioUrl:audioUrl, imagePath:imagePath, imageUrl:imageUrl,plan_name:plan_name,releaseDate:releaseDate, songType:songType, downloadedPath:"",downloadedImagePath:"", email: "")]
                                             }
                                         }
                                     }
@@ -445,10 +456,10 @@ class LibraryViewController: UIViewController,
                                             self.dismissAlert()
                                         }
                                         
-                                        var songsIn = [Song.init(title: song.title, audioPath:song.audioPath, downloadedPath:"\(songDestination)",downloadedImagePath:"\(imageDestination)", imageUrl: song.imageUrl, releaseDate:song.releaseDate, songType:song.songType)]
+                                        var songsIn = [Song.init(title: song.title, audioPath:song.audioPath, downloadedPath:"\(songDestination)",downloadedImagePath:"\(imageDestination)", imageUrl: song.imageUrl, releaseDate:song.releaseDate, songType:song.songType, email:self.userEmail)]
                                         
-                                        for innserSong in actualLocalSongList {
-                                            songsIn.append(Song.init(title:innserSong.title, audioPath:innserSong.audioPath, downloadedPath:innserSong.downloadedPath, downloadedImagePath:innserSong.downloadedImagePath, imageUrl: innserSong.imageUrl, releaseDate:innserSong.releaseDate, songType:innserSong.songType))
+                                        for innserSong in self.storedSongList {
+                                            songsIn.append(Song.init(title:innserSong.title, audioPath:innserSong.audioPath, downloadedPath:innserSong.downloadedPath, downloadedImagePath:innserSong.downloadedImagePath, imageUrl: innserSong.imageUrl, releaseDate:innserSong.releaseDate, songType:innserSong.songType, email:innserSong.email))
                                         }
                                         
                                         playerItems = []

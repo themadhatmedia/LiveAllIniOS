@@ -9,8 +9,9 @@ class SongList {
     var songType = 0
     var downloadedPath = ""
     var downloadedImagePath = ""
+    var email = ""
     
-    init(title:String, audioPath:String, audioUrl:String, imagePath: String, imageUrl: String, plan_name: [String], releaseDate: String, songType:Int, downloadedPath: String, downloadedImagePath:String ) {
+    init(title:String, audioPath:String, audioUrl:String, imagePath: String, imageUrl: String, plan_name: [String], releaseDate: String, songType:Int, downloadedPath: String, downloadedImagePath:String, email:String) {
         self.title = title
         self.audioPath = audioPath
         self.audioUrl = audioUrl
@@ -21,5 +22,6 @@ class SongList {
         self.songType = songType
         self.downloadedPath = downloadedPath
         self.downloadedImagePath = downloadedImagePath
+        self.email = email
     }
 }
